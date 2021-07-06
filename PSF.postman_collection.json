@@ -1,0 +1,2743 @@
+{
+	"info": {
+		"_postman_id": "f7ff18ba-9824-44d5-bf1c-521b56c54379",
+		"name": "PSF",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ElectrumX / Fulcrum",
+			"item": [
+				{
+					"name": "Get Balance",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"success property is true\", function (){",
+									"    pm.expect(responseJson.success).to.eql(true);",
+									"});",
+									"pm.test(\"balance property exist\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"balance\")",
+									"    pm.expect(responseJson.balance).to.be.an(\"object\");",
+									"});",
+									"pm.test(\"balance object has,'unconfirmed' and 'confirmed' property\", function (){",
+									"    pm.expect(responseJson.balance).to.have.property(\"unconfirmed\");",
+									"    pm.expect(responseJson.balance).to.have.property(\"confirmed\");",
+									"",
+									"    pm.expect(responseJson.balance.unconfirmed).to.be.a(\"number\");",
+									"    pm.expect(responseJson.balance.confirmed).to.be.a(\"number\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/electrumx/balance/{{bchAddress}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"electrumx",
+								"balance",
+								"{{bchAddress}}"
+							]
+						},
+						"description": "Get balance for a single address."
+					},
+					"response": []
+				},
+				{
+					"name": "Get balances",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"success is true\", function (){",
+									"    pm.expect(responseJson.success).to.eql(true);",
+									"});",
+									"pm.test(\"'balances' property is array\", function (){",
+									"    pm.expect(responseJson.balances).to.be.a(\"array\");",
+									"});",
+									"pm.test(\"balances array should has balance key\", function (){",
+									"    pm.expect(responseJson.balances[0]).to.have.property(\"balance\")",
+									"});",
+									"pm.test(\"balance has 'unconfirmed' and 'confirmed' property \", function (){",
+									"    pm.expect(responseJson.balances[0].balance).to.have.property(\"confirmed\")",
+									"    pm.expect(responseJson.balances[0].balance).to.have.property(\"unconfirmed\")",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"addresses\":[\"{{bchAddress}}\",\"{{bchAddress}}\"]}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/electrumx/balance/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"electrumx",
+								"balance",
+								""
+							]
+						},
+						"description": "Returns an array of objects. Each object contains BCH balances for an address. Up to 20 addresses per request."
+					},
+					"response": []
+				},
+				{
+					"name": "Get utxos for an address",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"success is true\", function (){",
+									"    pm.expect(responseJson.success).to.eql(true);",
+									"});",
+									"pm.test(\"response has array of utxos\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"utxos\");",
+									"    pm.expect(responseJson.utxos).to.be.an(\"array\");",
+									"});",
+									"pm.test(\"utxos has the corresponding keys\", function (){",
+									"    pm.expect(responseJson.utxos[0]).to.have.property(\"height\");",
+									"    pm.expect(responseJson.utxos[0]).to.have.property(\"tx_hash\");",
+									"    pm.expect(responseJson.utxos[0]).to.have.property(\"tx_pos\");",
+									"    pm.expect(responseJson.utxos[0]).to.have.property(\"value\");",
+									"",
+									"    pm.expect(responseJson.utxos[0].height).to.be.a(\"number\");",
+									"    pm.expect(responseJson.utxos[0].tx_hash).to.be.a(\"string\");",
+									"    pm.expect(responseJson.utxos[0].tx_pos).to.be.a(\"number\");",
+									"    pm.expect(responseJson.utxos[0].value).to.be.a(\"number\");",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/electrumx/utxos/{{bchAddress}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"electrumx",
+								"utxos",
+								"{{bchAddress}}"
+							]
+						},
+						"description": "Returns an object with UTXOs associated with an address."
+					},
+					"response": []
+				},
+				{
+					"name": "Get utxos for adresses",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"success is true\", function (){",
+									"    pm.expect(responseJson.success).to.eql(true);",
+									"});",
+									"pm.test(\"response has array of utxos\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"utxos\");",
+									"    pm.expect(responseJson.utxos).to.be.an(\"array\");",
+									"    pm.expect(responseJson.utxos[0]).to.have.property(\"utxos\");",
+									"});",
+									"pm.test(\"utxos has the corresponding keys\", function (){",
+									"    pm.expect(responseJson.utxos[0].utxos[0]).to.have.property(\"height\");",
+									"    pm.expect(responseJson.utxos[0].utxos[0]).to.have.property(\"tx_hash\");",
+									"    pm.expect(responseJson.utxos[0].utxos[0]).to.have.property(\"tx_pos\");",
+									"    pm.expect(responseJson.utxos[0].utxos[0]).to.have.property(\"value\");",
+									"",
+									"    pm.expect(responseJson.utxos[0].utxos[0].height).to.be.a(\"number\");",
+									"    pm.expect(responseJson.utxos[0].utxos[0].tx_hash).to.be.a(\"string\");",
+									"    pm.expect(responseJson.utxos[0].utxos[0].tx_pos).to.be.a(\"number\");",
+									"    pm.expect(responseJson.utxos[0].utxos[0].value).to.be.a(\"number\");",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"addresses\":[\"{{bchAddress}}\",\"{{bchAddress}}\"]}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/electrumx/utxos",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"electrumx",
+								"utxos"
+							]
+						},
+						"description": "Returns an array of objects. Each object contains UTXOs for an address. Up to 20 addresses per request."
+					},
+					"response": []
+				},
+				{
+					"name": "Get transaction history",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"success is true\", function (){",
+									"    pm.expect(responseJson.success).to.eql(true);",
+									"});",
+									"pm.test(\"response has array of transactions\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"transactions\");",
+									"    pm.expect(responseJson.transactions).to.be.an(\"array\");",
+									"});",
+									"pm.test(\"transactions has the corresponding keys\", function (){",
+									"    pm.expect(responseJson.transactions[0]).to.have.property(\"height\");",
+									"    pm.expect(responseJson.transactions[0]).to.have.property(\"tx_hash\");",
+									"",
+									"    pm.expect(responseJson.transactions[0].height).to.be.a(\"number\");",
+									"    pm.expect(responseJson.transactions[0].tx_hash).to.be.a(\"string\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/electrumx/transactions/{{bchAddress}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"electrumx",
+								"transactions",
+								"{{bchAddress}}"
+							]
+						},
+						"description": "Returns an object with transactions for an address."
+					},
+					"response": []
+				},
+				{
+					"name": "Get transaction history for adresses",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"success is true\", function (){",
+									"    pm.expect(responseJson.success).to.eql(true);",
+									"});",
+									"pm.test(\"response has array of transactions\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"transactions\");",
+									"    pm.expect(responseJson.transactions).to.be.an(\"array\");",
+									"    pm.expect(responseJson.transactions[0]).to.have.property(\"transactions\");",
+									"});",
+									"pm.test(\"transactions has the corresponding keys\", function (){",
+									"    pm.expect(responseJson.transactions[0].transactions[0]).to.have.property(\"height\");",
+									"    pm.expect(responseJson.transactions[0].transactions[0]).to.have.property(\"tx_hash\");",
+									" ",
+									"    pm.expect(responseJson.transactions[0].transactions[0].height).to.be.a(\"number\");",
+									"    pm.expect(responseJson.transactions[0].transactions[0].tx_hash).to.be.a(\"string\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"addresses\":[\"{{bchAddress}}\",\"{{bchAddress}}\"]}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/electrumx/transactions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"electrumx",
+								"transactions"
+							]
+						},
+						"description": "Returns an array of objects. Each object contains transaction history for an address. Up to 20 addresses per request."
+					},
+					"response": []
+				},
+				{
+					"name": "Get unconfirmed UTXO's",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"success is true\", function (){",
+									"    pm.expect(responseJson.success).to.eql(true);",
+									"});",
+									"pm.test(\"response has array of utxos\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"utxos\");",
+									"    pm.expect(responseJson.utxos).to.be.an(\"array\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/electrumx/unconfirmed/{{bchAddress}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"electrumx",
+								"unconfirmed",
+								"{{bchAddress}}"
+							]
+						},
+						"description": "Returns an object with unconfirmed UTXOs associated with an address."
+					},
+					"response": []
+				},
+				{
+					"name": "Get unconfirmed UTXOs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"success is true\", function (){",
+									"    pm.expect(responseJson.success).to.eql(true);",
+									"});",
+									"pm.test(\"response has array of utxos\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"utxos\");",
+									"    pm.expect(responseJson.utxos).to.be.an(\"array\");",
+									"    pm.expect(responseJson.utxos[0]).to.have.property(\"utxos\");",
+									"});",
+									"pm.test(\"utxos has the corresponding keys\", function (){",
+									"    pm.expect(responseJson.utxos[0].utxos[0]).to.have.property(\"height\");",
+									"    pm.expect(responseJson.utxos[0].utxos[0]).to.have.property(\"tx_hash\");",
+									"    pm.expect(responseJson.utxos[0].utxos[0]).to.have.property(\"tx_pos\");",
+									"    pm.expect(responseJson.utxos[0].utxos[0]).to.have.property(\"value\");",
+									"",
+									"    pm.expect(responseJson.utxos[0].utxos[0].height).to.be.a(\"number\");",
+									"    pm.expect(responseJson.utxos[0].utxos[0].tx_hash).to.be.a(\"string\");",
+									"    pm.expect(responseJson.utxos[0].utxos[0].tx_pos).to.be.a(\"number\");",
+									"    pm.expect(responseJson.utxos[0].utxos[0].value).to.be.a(\"number\");",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"addresses\": [\"{{bchAddress}}\" , \"{{bchAddress}}\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/electrumx/utxos/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"electrumx",
+								"utxos",
+								""
+							]
+						},
+						"description": "Get unconfirmed UTXOs (mempool) for an array of addresses"
+					},
+					"response": []
+				},
+				{
+					"name": "Get transaction details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"success is true\", function (){",
+									"    pm.expect(responseJson.success).to.eql(true);",
+									"});",
+									"pm.test(\"response has details object\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"details\");",
+									"    pm.expect(responseJson.details).to.be.an(\"object\");",
+									"});",
+									"pm.test(\"details has the corresponding keys\", function (){",
+									"    pm.expect(responseJson.details).to.have.property(\"blockhash\");",
+									"    pm.expect(responseJson.details).to.have.property(\"blocktime\");",
+									"    pm.expect(responseJson.details).to.have.property(\"confirmations\");",
+									"    pm.expect(responseJson.details).to.have.property(\"hash\");",
+									"    pm.expect(responseJson.details).to.have.property(\"hex\");",
+									"    pm.expect(responseJson.details).to.have.property(\"locktime\");",
+									"    pm.expect(responseJson.details).to.have.property(\"size\");",
+									"    pm.expect(responseJson.details).to.have.property(\"time\");",
+									"    pm.expect(responseJson.details).to.have.property(\"txid\");",
+									"    pm.expect(responseJson.details).to.have.property(\"version\");",
+									"    pm.expect(responseJson.details).to.have.property(\"vin\");",
+									"    pm.expect(responseJson.details).to.have.property(\"vout\");",
+									"",
+									"",
+									"",
+									"    pm.expect(responseJson.details.blockhash).to.be.a(\"string\");",
+									"    pm.expect(responseJson.details.blocktime).to.be.a(\"number\");",
+									"    pm.expect(responseJson.details.confirmations).to.be.a(\"number\");",
+									"    pm.expect(responseJson.details.hash).to.be.a(\"string\");",
+									"    pm.expect(responseJson.details.hex).to.be.a(\"string\");",
+									"    pm.expect(responseJson.details.locktime).to.be.a(\"number\");",
+									"    pm.expect(responseJson.details.size).to.be.a(\"number\");",
+									"    pm.expect(responseJson.details.time).to.be.a(\"number\");",
+									"    pm.expect(responseJson.details.txid).to.be.a(\"string\");",
+									"    pm.expect(responseJson.details.version).to.be.a(\"number\");",
+									"    pm.expect(responseJson.details.vin).to.be.a(\"array\");",
+									"    pm.expect(responseJson.details.vout).to.be.a(\"array\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/electrumx/tx/data/{{txid}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"electrumx",
+								"tx",
+								"data",
+								"{{txid}}"
+							]
+						},
+						"description": "Returns an object with details for the transaction - inputs, outputs etc."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Transactions Details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"success is true\", function (){",
+									"    pm.expect(responseJson.success).to.eql(true);",
+									"});",
+									"pm.test(\"response has array of transactions details\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"transactions\");",
+									"    pm.expect(responseJson.transactions).to.be.a(\"array\");",
+									"    pm.expect(responseJson.transactions[0].details).to.be.an(\"object\");",
+									"});",
+									"pm.test(\"details has the corresponding keys\", function (){",
+									"    const detail = responseJson.transactions[0].details",
+									"    pm.expect(detail).to.have.property(\"blockhash\");",
+									"    pm.expect(detail).to.have.property(\"blocktime\");",
+									"    pm.expect(detail).to.have.property(\"confirmations\");",
+									"    pm.expect(detail).to.have.property(\"hash\");",
+									"    pm.expect(detail).to.have.property(\"hex\");",
+									"    pm.expect(detail).to.have.property(\"locktime\");",
+									"    pm.expect(detail).to.have.property(\"size\");",
+									"    pm.expect(detail).to.have.property(\"time\");",
+									"    pm.expect(detail).to.have.property(\"txid\");",
+									"    pm.expect(detail).to.have.property(\"version\");",
+									"    pm.expect(detail).to.have.property(\"vin\");",
+									"    pm.expect(detail).to.have.property(\"vout\");",
+									"",
+									"",
+									"",
+									"    pm.expect(detail.blockhash).to.be.a(\"string\");",
+									"    pm.expect(detail.blocktime).to.be.a(\"number\");",
+									"    pm.expect(detail.confirmations).to.be.a(\"number\");",
+									"    pm.expect(detail.hash).to.be.a(\"string\");",
+									"    pm.expect(detail.hex).to.be.a(\"string\");",
+									"    pm.expect(detail.locktime).to.be.a(\"number\");",
+									"    pm.expect(detail.size).to.be.a(\"number\");",
+									"    pm.expect(detail.time).to.be.a(\"number\");",
+									"    pm.expect(detail.txid).to.be.a(\"string\");",
+									"    pm.expect(detail.version).to.be.a(\"number\");",
+									"    pm.expect(detail.vin).to.be.a(\"array\");",
+									"    pm.expect(detail.vout).to.be.a(\"array\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"txids\":[\"{{txid}}\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/electrumx/tx/data",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"electrumx",
+								"tx",
+								"data"
+							]
+						},
+						"description": "Returns an array of objects. Each object contains transaction details for one TXID. Up to 20 TXIDs per request.\n\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Get block headers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"success is true\", function (){",
+									"    pm.expect(responseJson.success).to.eql(true);",
+									"});",
+									"pm.test(\"response has array of headers\", function (){",
+									"    pm.expect(responseJson.headers).to.be.an(\"array\");",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/electrumx/block/headers/42?count=2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"electrumx",
+								"block",
+								"headers",
+								"42"
+							],
+							"query": [
+								{
+									"key": "count",
+									"value": "2"
+								}
+							]
+						},
+						"description": "Returns an array with block headers starting at the block height\n\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Broadcast Transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"response has success property\", function () {",
+									"    pm.expect(responseJson).to.have.property(\"success\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"txHex\": \"{{txHex}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/electrumx/tx/broadcast",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"electrumx",
+								"tx",
+								"broadcast"
+							]
+						},
+						"description": "Broadcast a raw transaction and return the transaction ID on success or error on failure.\n\n"
+					},
+					"response": []
+				}
+			],
+			"description": "Address"
+		},
+		{
+			"name": "Blockchain",
+			"item": [
+				{
+					"name": "Get block count",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be a number\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"number\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/blockchain/getBlockCount/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"blockchain",
+								"getBlockCount",
+								""
+							]
+						},
+						"description": "Returns the number of blocks in the longest blockchain."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Chain Tips",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be array\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"array\");",
+									"});",
+									"",
+									"pm.test(\"response has the corresponding keys\", function (){",
+									"    pm.expect(responseJson[0]).to.have.property(\"height\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"hash\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"branchlen\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"status\");",
+									"",
+									"    pm.expect(responseJson[0].height).to.be.a(\"number\");",
+									"    pm.expect(responseJson[0].hash).to.be.a(\"string\");",
+									"    pm.expect(responseJson[0].branchlen).to.be.a(\"number\");",
+									"    pm.expect(responseJson[0].status).to.be.a(\"string\");",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/blockchain/getChainTips/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"blockchain",
+								"getChainTips",
+								""
+							]
+						},
+						"description": "Return information about all known tips in the block tree, including the main chain as well as orphaned branches."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Mempool Ancestors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/blockchain/getMempoolAncestors/{{txid}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"blockchain",
+								"getMempoolAncestors",
+								"{{txid}}"
+							]
+						},
+						"description": "Returns mempool ancestors data for given TXID. It must be in mempool (unconfirmed). This call is handy to tell if a UTXO is bumping up against the 25 ancestor chain-limit."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Tx Out Proof",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/blockchain/getTxOutProofSingle/{{txid}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"blockchain",
+								"getTxOutProofSingle",
+								"{{txid}}"
+							]
+						},
+						"description": "Returns a hex-encoded proof that 'txid' was included in a block."
+					},
+					"response": []
+				},
+				{
+					"name": "Get tx out",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be object\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"object\");",
+									"});",
+									"",
+									"pm.test(\"response has the corresponding keys\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"bestblock\");",
+									"    pm.expect(responseJson).to.have.property(\"confirmations\");",
+									"    pm.expect(responseJson).to.have.property(\"value\");",
+									"    pm.expect(responseJson).to.have.property(\"scriptPubKey\");",
+									"    pm.expect(responseJson).to.have.property(\"coinbase\");",
+									"",
+									"    pm.expect(responseJson.bestblock).to.be.a(\"string\");",
+									"    pm.expect(responseJson.confirmations).to.be.a(\"number\");",
+									"    pm.expect(responseJson.value).to.be.a(\"number\");",
+									"    pm.expect(responseJson.scriptPubKey).to.be.an(\"object\");",
+									"    pm.expect(responseJson.coinbase).to.be.a(\"boolean\");",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/blockchain/getTxOut/{{txid}}/0?mempool=false",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"blockchain",
+								"getTxOut",
+								"{{txid}}",
+								"0"
+							],
+							"query": [
+								{
+									"key": "mempool",
+									"value": "false"
+								}
+							]
+						},
+						"description": "Returns details about an unspent transaction output."
+					},
+					"response": []
+				},
+				{
+					"name": "Get details on a TX output",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be object\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"object\");",
+									"});",
+									"",
+									"pm.test(\"response has the corresponding keys\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"bestblock\");",
+									"    pm.expect(responseJson).to.have.property(\"confirmations\");",
+									"    pm.expect(responseJson).to.have.property(\"value\");",
+									"    pm.expect(responseJson).to.have.property(\"scriptPubKey\");",
+									"    pm.expect(responseJson).to.have.property(\"coinbase\");",
+									"",
+									"    pm.expect(responseJson.bestblock).to.be.a(\"string\");",
+									"    pm.expect(responseJson.confirmations).to.be.a(\"number\");",
+									"    pm.expect(responseJson.value).to.be.a(\"number\");",
+									"    pm.expect(responseJson.scriptPubKey).to.be.an(\"object\");",
+									"    pm.expect(responseJson.coinbase).to.be.a(\"boolean\");",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"txid\":\"{{txid}}\",\n    \"vout\":0,\n    \"mempool\":true\n    \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/blockchain/getTxOut/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"blockchain",
+								"getTxOut",
+								""
+							]
+						},
+						"description": "Returns details about an unspent transaction output."
+					},
+					"response": []
+				},
+				{
+					"name": "Get best block hash",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be a number\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"string\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/blockchain/getBestBlockHash",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"blockchain",
+								"getBestBlockHash"
+							]
+						},
+						"description": "Returns the hash of the best (tip) block in the longest block chain."
+					},
+					"response": []
+				},
+				{
+					"name": "Get blockchain info",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be a object\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"object\");",
+									"});",
+									"",
+									"pm.test(\"response has the corresponding keys\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"chain\");",
+									"    pm.expect(responseJson).to.have.property(\"blocks\");",
+									"    pm.expect(responseJson).to.have.property(\"headers\");",
+									"    pm.expect(responseJson).to.have.property(\"bestblockhash\");",
+									"    pm.expect(responseJson).to.have.property(\"difficulty\");",
+									"    pm.expect(responseJson).to.have.property(\"mediantime\");",
+									"    pm.expect(responseJson).to.have.property(\"verificationprogress\");",
+									"    pm.expect(responseJson).to.have.property(\"initialblockdownload\");",
+									"    pm.expect(responseJson).to.have.property(\"chainwork\");",
+									"    pm.expect(responseJson).to.have.property(\"size_on_disk\");",
+									"    pm.expect(responseJson).to.have.property(\"pruned\");",
+									"",
+									"    pm.expect(responseJson.chain).to.be.a(\"string\");",
+									"    pm.expect(responseJson.blocks).to.be.a(\"number\");",
+									"    pm.expect(responseJson.headers).to.be.a(\"number\");",
+									"    pm.expect(responseJson.bestblockhash).to.be.a(\"string\");",
+									"    pm.expect(responseJson.difficulty).to.be.a(\"number\");",
+									"    pm.expect(responseJson.mediantime).to.be.a(\"number\");",
+									"    pm.expect(responseJson.verificationprogress).to.be.a(\"number\");",
+									"    pm.expect(responseJson.initialblockdownload).to.be.a(\"boolean\"); ",
+									"    pm.expect(responseJson.chainwork).to.be.a(\"string\");",
+									"    pm.expect(responseJson.size_on_disk).to.be.a(\"number\");",
+									"    pm.expect(responseJson.pruned).to.be.a(\"boolean\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/blockchain/getBlockchainInfo",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"blockchain",
+								"getBlockchainInfo"
+							]
+						},
+						"description": "Returns an object containing various state info regarding blockchain processing."
+					},
+					"response": []
+				},
+				{
+					"name": "Get bulk mempool entry",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"txids\": [\n    \"{{txid}}\",\n    \"{{txid}}\"\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/blockchain/getMempoolEntry",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"blockchain",
+								"getMempoolEntry"
+							]
+						},
+						"description": "Returns mempool data for multiple transactions."
+					},
+					"response": []
+				},
+				{
+					"name": "Get difficulty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be a number\", function () {",
+									"    pm.expect(responseJson).to.be.a(\"number\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/blockchain/getDifficulty",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"blockchain",
+								"getDifficulty"
+							]
+						},
+						"description": "Get the current difficulty value, used to regulate mining power on the network"
+					},
+					"response": []
+				},
+				{
+					"name": "Get mempool info",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/getMempoolInfo",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"getMempoolInfo"
+							]
+						},
+						"description": "Returns details on the active state of the TX memory pool."
+					},
+					"response": []
+				},
+				{
+					"name": "Get multiple block headers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be an array\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"array\");",
+									"});",
+									"",
+									"pm.test(\"block has the corresponding keys\", function (){",
+									"    pm.expect(responseJson[0]).to.have.property(\"hash\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"confirmations\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"height\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"version\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"versionHex\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"merkleroot\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"time\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"mediantime\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"nonce\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"bits\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"difficulty\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"bits\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"chainwork\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"nTx\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"previousblockhash\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"nextblockhash\");",
+									"",
+									"",
+									"    pm.expect(responseJson[0].hash).to.be.a(\"string\");",
+									"    pm.expect(responseJson[0].confirmations).to.be.a(\"number\");",
+									"    pm.expect(responseJson[0].height).to.be.a(\"number\");",
+									"    pm.expect(responseJson[0].version).to.be.a(\"number\");",
+									"    pm.expect(responseJson[0].versionHex).to.be.a(\"string\");",
+									"    pm.expect(responseJson[0].merkleroot).to.be.a(\"string\");",
+									"    pm.expect(responseJson[0].time).to.be.a(\"number\");",
+									"    pm.expect(responseJson[0].mediantime).to.be.a(\"number\"); ",
+									"    pm.expect(responseJson[0].nonce).to.be.a(\"number\");",
+									"    pm.expect(responseJson[0].bits).to.be.a(\"string\");",
+									"    pm.expect(responseJson[0].difficulty).to.be.a(\"number\");",
+									"    pm.expect(responseJson[0].chainwork).to.be.a(\"string\");",
+									"    pm.expect(responseJson[0].nTx).to.be.a(\"number\");",
+									"    pm.expect(responseJson[0].previousblockhash).to.be.a(\"string\");",
+									"    pm.expect(responseJson[0].nextblockhash).to.be.a(\"string\");",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"hashes\": [\n    \"{{hashes}}\"\n      ],\n  \"verbose\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/blockchain/getBlockHeader",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"blockchain",
+								"getBlockHeader"
+							]
+						},
+						"description": "If verbose is false (default), returns a string that is serialized, hex-encoded data for blockheader 'hash'. If verbose is true, returns an Object with information about blockheader hash."
+					},
+					"response": []
+				},
+				{
+					"name": "Get raw mempool",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/getRawMempool/?verbose=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"getRawMempool",
+								""
+							],
+							"query": [
+								{
+									"key": "verbose",
+									"value": "true"
+								}
+							]
+						},
+						"description": "Returns all transaction ids in memory pool as a json array of string transaction ids."
+					},
+					"response": []
+				},
+				{
+					"name": "Get single block header",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be a object\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"object\");",
+									"});",
+									"",
+									"pm.test(\"block has the corresponding keys\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"hash\");",
+									"    pm.expect(responseJson).to.have.property(\"confirmations\");",
+									"    pm.expect(responseJson).to.have.property(\"height\");",
+									"    pm.expect(responseJson).to.have.property(\"version\");",
+									"    pm.expect(responseJson).to.have.property(\"versionHex\");",
+									"    pm.expect(responseJson).to.have.property(\"merkleroot\");",
+									"    pm.expect(responseJson).to.have.property(\"time\");",
+									"    pm.expect(responseJson).to.have.property(\"mediantime\");",
+									"    pm.expect(responseJson).to.have.property(\"nonce\");",
+									"    pm.expect(responseJson).to.have.property(\"bits\");",
+									"    pm.expect(responseJson).to.have.property(\"difficulty\");",
+									"    pm.expect(responseJson).to.have.property(\"bits\");",
+									"    pm.expect(responseJson).to.have.property(\"chainwork\");",
+									"    pm.expect(responseJson).to.have.property(\"nTx\");",
+									"    pm.expect(responseJson).to.have.property(\"previousblockhash\");",
+									"    pm.expect(responseJson).to.have.property(\"nextblockhash\");",
+									"",
+									"",
+									"    pm.expect(responseJson.hash).to.be.a(\"string\");",
+									"    pm.expect(responseJson.confirmations).to.be.a(\"number\");",
+									"    pm.expect(responseJson.height).to.be.a(\"number\");",
+									"    pm.expect(responseJson.version).to.be.a(\"number\");",
+									"    pm.expect(responseJson.versionHex).to.be.a(\"string\");",
+									"    pm.expect(responseJson.merkleroot).to.be.a(\"string\");",
+									"    pm.expect(responseJson.time).to.be.a(\"number\");",
+									"    pm.expect(responseJson.mediantime).to.be.a(\"number\"); ",
+									"    pm.expect(responseJson.nonce).to.be.a(\"number\");",
+									"    pm.expect(responseJson.bits).to.be.a(\"string\");",
+									"    pm.expect(responseJson.difficulty).to.be.a(\"number\");",
+									"    pm.expect(responseJson.chainwork).to.be.a(\"string\");",
+									"    pm.expect(responseJson.nTx).to.be.a(\"number\");",
+									"    pm.expect(responseJson.previousblockhash).to.be.a(\"string\");",
+									"    pm.expect(responseJson.nextblockhash).to.be.a(\"string\");",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/blockchain/getBlockHeader/{{hashes}}?verbose=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"blockchain",
+								"getBlockHeader",
+								"{{hashes}}"
+							],
+							"query": [
+								{
+									"key": "verbose",
+									"value": "true"
+								}
+							]
+						},
+						"description": "If verbose is false (default), returns a string that is serialized, hex-encoded data for blockheader 'hash'. If verbose is true, returns an Object with information about blockheader hash."
+					},
+					"response": []
+				},
+				{
+					"name": "Get single mempool entry",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/blockchain/getMempoolEntry/{{txid}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"blockchain",
+								"getMempoolEntry",
+								"{{txid}}"
+							]
+						},
+						"description": "Returns mempool data for given transaction. TXID must be in mempool (unconfirmed)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Block",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be a object\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"object\");",
+									"});",
+									"",
+									"pm.test(\"block has the corresponding keys\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"hash\");",
+									"    pm.expect(responseJson).to.have.property(\"confirmations\");",
+									"    pm.expect(responseJson).to.have.property(\"size\");",
+									"    pm.expect(responseJson).to.have.property(\"height\");",
+									"    pm.expect(responseJson).to.have.property(\"version\");",
+									"    pm.expect(responseJson).to.have.property(\"versionHex\");",
+									"    pm.expect(responseJson).to.have.property(\"merkleroot\");",
+									"    pm.expect(responseJson).to.have.property(\"tx\");",
+									"    pm.expect(responseJson).to.have.property(\"time\");",
+									"    pm.expect(responseJson).to.have.property(\"mediantime\");",
+									"    pm.expect(responseJson).to.have.property(\"nonce\");",
+									"    pm.expect(responseJson).to.have.property(\"bits\");",
+									"    pm.expect(responseJson).to.have.property(\"difficulty\");",
+									"    pm.expect(responseJson).to.have.property(\"bits\");",
+									"    pm.expect(responseJson).to.have.property(\"chainwork\");",
+									"    pm.expect(responseJson).to.have.property(\"nTx\");",
+									"    pm.expect(responseJson).to.have.property(\"previousblockhash\");",
+									"    pm.expect(responseJson).to.have.property(\"nextblockhash\");",
+									"",
+									"",
+									"    pm.expect(responseJson.hash).to.be.a(\"string\");",
+									"    pm.expect(responseJson.confirmations).to.be.a(\"number\");",
+									"    pm.expect(responseJson.size).to.be.a(\"number\");",
+									"    pm.expect(responseJson.height).to.be.a(\"number\");",
+									"    pm.expect(responseJson.version).to.be.a(\"number\");",
+									"    pm.expect(responseJson.versionHex).to.be.a(\"string\");",
+									"    pm.expect(responseJson.merkleroot).to.be.a(\"string\");",
+									"    pm.expect(responseJson.tx).to.be.an(\"array\");",
+									"    pm.expect(responseJson.time).to.be.a(\"number\");",
+									"    pm.expect(responseJson.mediantime).to.be.a(\"number\"); ",
+									"    pm.expect(responseJson.nonce).to.be.a(\"number\");",
+									"    pm.expect(responseJson.bits).to.be.a(\"string\");",
+									"    pm.expect(responseJson.difficulty).to.be.a(\"number\");",
+									"    pm.expect(responseJson.chainwork).to.be.a(\"string\");",
+									"    pm.expect(responseJson.nTx).to.be.a(\"number\");",
+									"    pm.expect(responseJson.previousblockhash).to.be.a(\"string\");",
+									"    pm.expect(responseJson.nextblockhash).to.be.a(\"string\");",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"blockhash\": \"0000000000000000008e8d83cba6d45a9314bc2ef4538d4e0577c6bed8593536\",\n  \"verbosity\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/blockchain/getBlock/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"blockchain",
+								"getBlock",
+								""
+							]
+						},
+						"description": "Returns data from the block hash."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Control",
+			"item": [
+				{
+					"name": "Get Network Info",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be a object\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"object\");",
+									"});",
+									"",
+									"pm.test(\"info has the corresponding keys\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"version\");",
+									"    pm.expect(responseJson).to.have.property(\"subversion\");",
+									"    pm.expect(responseJson).to.have.property(\"protocolversion\");",
+									"    pm.expect(responseJson).to.have.property(\"localservices\");",
+									"    pm.expect(responseJson).to.have.property(\"localrelay\");",
+									"    pm.expect(responseJson).to.have.property(\"timeoffset\");",
+									"    pm.expect(responseJson).to.have.property(\"networkactive\");",
+									"    pm.expect(responseJson).to.have.property(\"connections\");",
+									"    pm.expect(responseJson).to.have.property(\"networks\");",
+									"    pm.expect(responseJson).to.have.property(\"relayfee\");",
+									"    pm.expect(responseJson).to.have.property(\"excessutxocharge\");",
+									"    pm.expect(responseJson).to.have.property(\"localaddresses\");",
+									"",
+									"    pm.expect(responseJson.version).to.be.a(\"number\");",
+									"    pm.expect(responseJson.subversion).to.be.a(\"string\");",
+									"    pm.expect(responseJson.protocolversion).to.be.a(\"number\");",
+									"    pm.expect(responseJson.localservices).to.be.a(\"string\");",
+									"    pm.expect(responseJson.localrelay).to.be.a(\"boolean\");",
+									"    pm.expect(responseJson.timeoffset).to.be.a(\"number\");",
+									"    pm.expect(responseJson.networkactive).to.be.a(\"boolean\");",
+									"    pm.expect(responseJson.connections).to.be.a(\"number\");",
+									"    pm.expect(responseJson.networks).to.be.an(\"array\");",
+									"    pm.expect(responseJson.relayfee).to.be.a(\"number\"); ",
+									"    pm.expect(responseJson.excessutxocharge).to.be.a(\"number\");",
+									"    pm.expect(responseJson.localaddresses).to.be.an(\"array\");",
+									"   ",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/control/getnetworkinfo",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"control",
+								"getnetworkinfo"
+							]
+						},
+						"description": "RPC call which gets basic full node information."
+					},
+					"response": []
+				}
+			],
+			"description": "Get Control info"
+		},
+		{
+			"name": "Encryption",
+			"item": [
+				{
+					"name": "Get public key for a BCH address",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be a object\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"object\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/encryption/publickey/{{bchAddress}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"encryption",
+								"publickey",
+								"{{bchAddress}}"
+							]
+						},
+						"description": "Scans the blockchain and tries to find the public key associated with a BCH address."
+					},
+					"response": []
+				}
+			],
+			"description": "Bitcoin-based Encryption Tools"
+		},
+		{
+			"name": "Mining",
+			"item": [
+				{
+					"name": "Returns network hashes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be a number\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"number\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/mining/getNetworkHashps?nblocks=120&height=-1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"mining",
+								"getNetworkHashps"
+							],
+							"query": [
+								{
+									"key": "nblocks",
+									"value": "120"
+								},
+								{
+									"key": "height",
+									"value": "-1"
+								}
+							]
+						},
+						"description": "Returns the estimated network hashes per second based on the last n blocks"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Mining Info",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be an object\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"object\");",
+									"});",
+									"",
+									"pm.test(\"info has the corresponding keys\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"blocks\");",
+									"    pm.expect(responseJson).to.have.property(\"currentblocksize\");",
+									"    pm.expect(responseJson).to.have.property(\"currentblocktx\");",
+									"    pm.expect(responseJson).to.have.property(\"difficulty\");",
+									"    pm.expect(responseJson).to.have.property(\"networkhashps\");",
+									"    pm.expect(responseJson).to.have.property(\"pooledtx\");",
+									"    pm.expect(responseJson).to.have.property(\"chain\");",
+									"   ",
+									"",
+									"    pm.expect(responseJson.blocks).to.be.a(\"number\");",
+									"    pm.expect(responseJson.currentblocksize).to.be.a(\"number\");",
+									"    pm.expect(responseJson.currentblocktx).to.be.a(\"number\");",
+									"    pm.expect(responseJson.difficulty).to.be.a(\"number\");",
+									"    pm.expect(responseJson.networkhashps).to.be.a(\"number\");",
+									"    pm.expect(responseJson.pooledtx).to.be.a(\"number\");",
+									"    pm.expect(responseJson.chain).to.be.a(\"string\");",
+									"    ",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/mining/getMiningInfo",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"mining",
+								"getMiningInfo"
+							]
+						},
+						"description": "Returns a json object containing mining-related information."
+					},
+					"response": []
+				}
+			],
+			"description": "Get Mining Info"
+		},
+		{
+			"name": "Raw Transaction",
+			"item": [
+				{
+					"name": "Bulk Decode Script",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be an array\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"array\");",
+									"});",
+									"",
+									"pm.test(\"script has the corresponding keys\", function (){",
+									"    pm.expect(responseJson[0]).to.have.property(\"asm\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"type\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"p2sh\");",
+									"",
+									"   ",
+									"    pm.expect(responseJson[0].asm).to.be.a(\"string\");",
+									"    pm.expect(responseJson[0].type).to.be.a(\"string\");",
+									"    pm.expect(responseJson[0].p2sh).to.be.a(\"string\");",
+									"    ",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"hexes\":[\"{{hex}}\",\"{{hex}}\"]}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/rawtransactions/decodeScript",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"rawtransactions",
+								"decodeScript"
+							]
+						},
+						"description": "Decode multiple hex-encoded scripts."
+					},
+					"response": []
+				},
+				{
+					"name": "Decode Bulk Raw Transactions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be an array\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"array\");",
+									"});",
+									"",
+									"pm.test(\"response has the corresponding keys\", function (){",
+									"    pm.expect(responseJson[0]).to.have.property(\"txid\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"hash\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"version\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"size\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"size\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"locktime\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"locktime\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"vin\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"vout\");",
+									"",
+									"",
+									"   ",
+									"    pm.expect(responseJson[0].txid).to.be.a(\"string\");",
+									"    pm.expect(responseJson[0].hash).to.be.a(\"string\");",
+									"    pm.expect(responseJson[0].version).to.be.a(\"number\");",
+									"    pm.expect(responseJson[0].size).to.be.a(\"number\");",
+									"    pm.expect(responseJson[0].locktime).to.be.a(\"number\");",
+									"    pm.expect(responseJson[0].vin).to.be.a(\"array\");",
+									"    pm.expect(responseJson[0].vout).to.be.a(\"array\");",
+									"    ",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"hexes\": [\n    \"{{hex}}\",\n    \"{{hex}}\"\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/rawtransactions/decodeRawTransaction",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"rawtransactions",
+								"decodeRawTransaction"
+							]
+						},
+						"description": "Return bulk hex encoded transaction."
+					},
+					"response": []
+				},
+				{
+					"name": "Decode Single Raw Transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be an object\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"object\");",
+									"});",
+									"",
+									"pm.test(\"response has the corresponding keys\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"txid\");",
+									"    pm.expect(responseJson).to.have.property(\"hash\");",
+									"    pm.expect(responseJson).to.have.property(\"version\");",
+									"    pm.expect(responseJson).to.have.property(\"size\");",
+									"    pm.expect(responseJson).to.have.property(\"size\");",
+									"    pm.expect(responseJson).to.have.property(\"locktime\");",
+									"    pm.expect(responseJson).to.have.property(\"locktime\");",
+									"    pm.expect(responseJson).to.have.property(\"vin\");",
+									"    pm.expect(responseJson).to.have.property(\"vout\");",
+									"",
+									"",
+									"   ",
+									"    pm.expect(responseJson.txid).to.be.a(\"string\");",
+									"    pm.expect(responseJson.hash).to.be.a(\"string\");",
+									"    pm.expect(responseJson.version).to.be.a(\"number\");",
+									"    pm.expect(responseJson.size).to.be.a(\"number\");",
+									"    pm.expect(responseJson.locktime).to.be.a(\"number\");",
+									"    pm.expect(responseJson.vin).to.be.a(\"array\");",
+									"    pm.expect(responseJson.vout).to.be.a(\"array\");",
+									"    ",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/rawtransactions/decodeRawTransaction/{{hex}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"rawtransactions",
+								"decodeRawTransaction",
+								"{{hex}}"
+							]
+						},
+						"description": "Return a JSON object representing the serialized, hex-encoded transaction."
+					},
+					"response": []
+				},
+				{
+					"name": "Decode Single Script",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be an object\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"object\");",
+									"});",
+									"",
+									"pm.test(\"script has the corresponding keys\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"asm\");",
+									"    pm.expect(responseJson).to.have.property(\"type\");",
+									"    pm.expect(responseJson).to.have.property(\"p2sh\");",
+									"",
+									"   ",
+									"    pm.expect(responseJson.asm).to.be.a(\"string\");",
+									"    pm.expect(responseJson.type).to.be.a(\"string\");",
+									"    pm.expect(responseJson.p2sh).to.be.a(\"string\");",
+									"    ",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/rawtransactions/decodeScript/{{hex}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"rawtransactions",
+								"decodeScript",
+								"{{hex}}"
+							]
+						},
+						"description": "Decode a hex-encoded script."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Bulk Raw Transactions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be an array of strings\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"array\");",
+									"    pm.expect(responseJson[0]).to.be.a(\"string\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"txids\": [\n    \"{{txid}}\",\n    \"{{txid}}\"\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/rawtransactions/getRawTransaction",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"rawtransactions",
+								"getRawTransaction"
+							]
+						},
+						"description": "Return the raw transaction data for multiple transactions. If verbose is 'true', returns an Object with information about 'txid'. If verbose is 'false' or omitted, returns a string that is serialized, hex-encoded data for 'txid'."
+					},
+					"response": []
+				},
+				{
+					"name": "Return the raw transaction data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be a strings\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"string\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/rawtransactions/getRawTransaction/{{txid}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"rawtransactions",
+								"getRawTransaction",
+								"{{txid}}"
+							]
+						},
+						"description": "return the raw transaction data. If verbose is 'true', returns an Object with information about 'txid'. If verbose is 'false' or omitted, returns a string that is serialized, hex-encoded data for 'txid'."
+					},
+					"response": []
+				},
+				{
+					"name": "Send Bulk Raw Transactions",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"hexes\": [\n    \"{{hex}}\",\n    \"{{hex}}\"\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/rawtransactions/sendRawTransaction",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"rawtransactions",
+								"sendRawTransaction"
+							]
+						},
+						"description": "Submits multiple raw transaction (serialized, hex-encoded) to local node and network."
+					},
+					"response": []
+				},
+				{
+					"name": "Send Single Raw Transaction",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/rawtransactions/sendRawTransaction/{{hex}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"rawtransactions",
+								"sendRawTransaction",
+								"{{hex}}"
+							]
+						},
+						"description": "Submits single raw transaction (serialized, hex-encoded) to local node and network."
+					},
+					"response": []
+				}
+			],
+			"description": "Get Raw Transaction Info"
+		},
+		{
+			"name": "SLP",
+			"item": [
+				{
+					"name": "Convert address to slpAddr",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be an object\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"object\");",
+									"});",
+									"pm.test(\"response has the corresponding keys\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"slpAddress\");",
+									"    pm.expect(responseJson).to.have.property(\"cashAddress\");",
+									"    pm.expect(responseJson).to.have.property(\"legacyAddress\");",
+									"",
+									"    pm.expect(responseJson.slpAddress).to.be.a(\"string\");",
+									"    pm.expect(responseJson.cashAddress).to.be.a(\"string\");",
+									"    pm.expect(responseJson.legacyAddress).to.be.a(\"string\"); ",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/slp/convert/{{slpAddress}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"slp",
+								"convert",
+								"{{slpAddress}}"
+							]
+						},
+						"description": "Convert address to slpAddr, cashAddr and legacy"
+					},
+					"response": []
+				},
+				{
+					"name": "List SLP balance for address",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be an array\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"array\");",
+									"});",
+									"pm.test(\"response has the corresponding keys\", function (){",
+									"    pm.expect(responseJson[0]).to.have.property(\"balanceString\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"slpAddress\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"tokenId\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"balance\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"decimalCount\");",
+									"",
+									"    pm.expect(responseJson[0].balanceString).to.be.a(\"string\");",
+									"    pm.expect(responseJson[0].slpAddress).to.be.a(\"string\");",
+									"    pm.expect(responseJson[0].tokenId).to.be.a(\"string\"); ",
+									"    pm.expect(responseJson[0].balance).to.be.a(\"number\");",
+									"    pm.expect(responseJson[0].decimalCount).to.be.a(\"number\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/slp/balancesForAddress/{{slpAddress}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"slp",
+								"balancesForAddress",
+								"{{slpAddress}}"
+							]
+						},
+						"description": "List SLP balance for address."
+					},
+					"response": []
+				},
+				{
+					"name": "List SLP balances for addresses",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be an array of array\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"array\");",
+									"    pm.expect(responseJson[0]).to.be.an(\"array\");",
+									"",
+									"});",
+									"pm.test(\"response has the corresponding keys\", function (){",
+									"    const slpResult = responseJson[0]",
+									"    pm.expect(slpResult[0]).to.have.property(\"balanceString\");",
+									"    pm.expect(slpResult[0]).to.have.property(\"slpAddress\");",
+									"    pm.expect(slpResult[0]).to.have.property(\"tokenId\");",
+									"    pm.expect(slpResult[0]).to.have.property(\"balance\");",
+									"    pm.expect(slpResult[0]).to.have.property(\"decimalCount\");",
+									"",
+									"    pm.expect(slpResult[0].balanceString).to.be.a(\"string\");",
+									"    pm.expect(slpResult[0].slpAddress).to.be.a(\"string\");",
+									"    pm.expect(slpResult[0].tokenId).to.be.a(\"string\"); ",
+									"    pm.expect(slpResult[0].balance).to.be.a(\"number\");",
+									"    pm.expect(slpResult[0].decimalCount).to.be.a(\"number\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"addresses\": [\n    \"{{slpAddress}}\"\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/slp/balancesForAddress/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"slp",
+								"balancesForAddress",
+								""
+							]
+						},
+						"description": "Returns SLP balances for an array of addresses."
+					},
+					"response": []
+				},
+				{
+					"name": "List stats for a slp token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be an object\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"object\");",
+									"",
+									"});",
+									"pm.test(\"response has the corresponding keys\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"decimals\");",
+									"    pm.expect(responseJson).to.have.property(\"timestamp\");",
+									"    pm.expect(responseJson).to.have.property(\"versionType\");",
+									"    pm.expect(responseJson).to.have.property(\"documentUri\");",
+									"    pm.expect(responseJson).to.have.property(\"symbol\");",
+									"    pm.expect(responseJson).to.have.property(\"name\");",
+									"    pm.expect(responseJson).to.have.property(\"containsBaton\");",
+									"    pm.expect(responseJson).to.have.property(\"id\");",
+									"    pm.expect(responseJson).to.have.property(\"documentHash\");",
+									"    pm.expect(responseJson).to.have.property(\"initialTokenQty\");",
+									"    pm.expect(responseJson).to.have.property(\"blockCreated\");",
+									"    pm.expect(responseJson).to.have.property(\"timestampUnix\");",
+									"    pm.expect(responseJson).to.have.property(\"totalMinted\");",
+									"    pm.expect(responseJson).to.have.property(\"totalBurned\");",
+									"    pm.expect(responseJson).to.have.property(\"circulatingSupply\");",
+									"",
+									"    pm.expect(responseJson.decimals).to.be.a(\"number\");",
+									"    pm.expect(responseJson.timestamp).to.be.a(\"string\");",
+									"    pm.expect(responseJson.versionType).to.be.a(\"number\"); ",
+									"    pm.expect(responseJson.documentUri).to.be.a(\"string\");",
+									"    pm.expect(responseJson.name).to.be.a(\"string\");",
+									"    pm.expect(responseJson.containsBaton).to.be.a(\"boolean\");",
+									"    pm.expect(responseJson.id).to.be.a(\"string\");",
+									"    pm.expect(responseJson.documentHash).to.be.a(\"string\"); ",
+									"    pm.expect(responseJson.initialTokenQty).to.be.a(\"number\");",
+									"    pm.expect(responseJson.blockCreated).to.be.a(\"number\");",
+									"    pm.expect(responseJson.timestampUnix).to.be.a(\"number\");",
+									"    pm.expect(responseJson.totalBurned).to.be.a(\"number\");",
+									"    pm.expect(responseJson.circulatingSupply).to.be.a(\"number\"); ",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/slp/tokenStats/{{tokenid}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"slp",
+								"tokenStats",
+								"{{tokenid}}"
+							]
+						},
+						"description": "Return list stats for a single slp token."
+					},
+					"response": []
+				},
+				{
+					"name": "List SLP addresses and balances for tokenId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be an array\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"array\");",
+									"",
+									"});",
+									"pm.test(\"response has the corresponding keys\", function (){",
+									"    pm.expect(responseJson[0]).to.have.property(\"tokenBalanceString\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"slpAddress\");",
+									"    pm.expect(responseJson[0]).to.have.property(\"tokenId\");",
+									"    ",
+									"    pm.expect(responseJson[0].tokenBalanceString).to.be.a(\"string\");",
+									"    pm.expect(responseJson[0].slpAddress).to.be.a(\"string\");",
+									"    pm.expect(responseJson[0].tokenId).to.be.a(\"string\"); ",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/slp/balancesForToken/{{tokenid}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"slp",
+								"balancesForToken",
+								"{{tokenid}}"
+							]
+						},
+						"description": "Returns List SLP addresses and balances for tokenId."
+					},
+					"response": []
+				},
+				{
+					"name": "SLP transaction details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be an object\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"object\");",
+									"",
+									"});",
+									"pm.test(\"response has the corresponding keys\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"retData\");",
+									"    pm.expect(responseJson.retData).to.be.a(\"object\");",
+									"});",
+									"pm.test(\"retData details has the corresponding keys\", function (){",
+									"    const retData = responseJson.retData",
+									"    pm.expect(retData).to.have.property(\"txid\");",
+									"    pm.expect(retData).to.have.property(\"hash\");",
+									"    pm.expect(retData).to.have.property(\"version\");",
+									"    pm.expect(retData).to.have.property(\"size\");",
+									"    pm.expect(retData).to.have.property(\"locktime\");",
+									"    pm.expect(retData).to.have.property(\"vin\");",
+									"    pm.expect(retData).to.have.property(\"vout\");",
+									"",
+									"    pm.expect(retData.txid).to.be.a(\"string\");",
+									"    pm.expect(retData.hash).to.be.a(\"string\");",
+									"    pm.expect(retData.version).to.be.a(\"number\");",
+									"    pm.expect(retData.size).to.be.a(\"number\");",
+									"    pm.expect(retData.locktime).to.be.a(\"number\");",
+									"    pm.expect(retData.vin).to.be.a(\"array\");",
+									"    pm.expect(retData.vout).to.be.a(\"array\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/slp/txDetails/{{slpTxid}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"slp",
+								"txDetails",
+								"{{slpTxid}}"
+							]
+						},
+						"description": "Transaction details on a token transfer."
+					},
+					"response": []
+				},
+				{
+					"name": "SLP transactions by tokenId and address",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be an array\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"array\");",
+									"",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/slp/transactions/{{slpTxid}}/{{slpAddress}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"slp",
+								"transactions",
+								"{{slpTxid}}",
+								"{{slpAddress}}"
+							]
+						},
+						"description": "Transactions by tokenId and address."
+					},
+					"response": []
+				},
+				{
+					"name": "Validate single SLP transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be an object\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"object\");",
+									"});",
+									"pm.test(\"response has the corresponding keys\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"txid\");",
+									"    pm.expect(responseJson).to.have.property(\"valid\");",
+									"",
+									"    pm.expect(responseJson.txid).to.be.a(\"string\");",
+									"    pm.expect(responseJson.valid).to.be.a(\"boolean\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/slp/validateTxid/{{slpTxid}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"slp",
+								"validateTxid",
+								"{{slpTxid}}"
+							]
+						},
+						"description": "Validate single SLP transaction by txid."
+					},
+					"response": []
+				},
+				{
+					"name": "Validate multiple SLP transactions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be an array\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"array\");",
+									"});",
+									"pm.test(\"tx has the corresponding keys\", function (){",
+									"    const tx = responseJson[0]",
+									"    pm.expect(tx).to.have.property(\"txid\");",
+									"    pm.expect(tx).to.have.property(\"valid\");",
+									"",
+									"    pm.expect(tx.txid).to.be.a(\"string\");",
+									"    pm.expect(tx.valid).to.be.a(\"boolean\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"txids\": [\n    \"{{slpTxid}}\",\n    \"{{slpTxid}}\"\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/slp/validateTxid/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"slp",
+								"validateTxid",
+								""
+							]
+						},
+						"description": "Validate multiple SLP transactions by txid."
+					},
+					"response": []
+				},
+				{
+					"name": "Generate SLP OP_RETURN",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be an object\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"object\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"tokenUtxos\": [\n    {\n      \"tokenId\": \"{{tokenid}}\",\n      \"decimals\": 0,\n      \"tokenQty\": 2\n    }\n  ],\n  \"sendQty\": 1.5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/slp/generateSendOpReturn/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"slp",
+								"generateSendOpReturn",
+								""
+							]
+						},
+						"description": "Returns OP_RETURN script and outputs"
+					},
+					"response": []
+				},
+				{
+					"name": "Hydrate UTXO data with SLP information",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be an object\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"object\");",
+									"",
+									"});",
+									"pm.test(\"response has slpUtxos array\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"slpUtxos\");",
+									"    pm.expect(responseJson.slpUtxos).to.be.an(\"array\");",
+									"});",
+									"pm.test(\"utxos must be an array\", function (){",
+									"    const utxos = responseJson.slpUtxos[0].utxos",
+									"    pm.expect(utxos).to.be.an(\"array\");",
+									"});",
+									"pm.test(\"utxos details has the corresponding keys\", function (){",
+									"    const utxos = responseJson.slpUtxos[0].utxos",
+									"    pm.expect(utxos[0]).to.have.property(\"txid\");",
+									"    pm.expect(utxos[0]).to.have.property(\"vout\");",
+									"    pm.expect(utxos[0]).to.have.property(\"value\");",
+									"    pm.expect(utxos[0]).to.have.property(\"height\");",
+									"    pm.expect(utxos[0]).to.have.property(\"confirmations\");",
+									"    pm.expect(utxos[0]).to.have.property(\"satoshis\");",
+									"    pm.expect(utxos[0]).to.have.property(\"isValid\");",
+									"",
+									"    pm.expect(utxos[0].txid).to.be.a(\"string\");",
+									"    pm.expect(utxos[0].vout).to.be.a(\"number\");",
+									"    pm.expect(utxos[0].value).to.be.a(\"string\");",
+									"    pm.expect(utxos[0].height).to.be.a(\"number\");",
+									"    pm.expect(utxos[0].confirmations).to.be.a(\"number\");",
+									"    pm.expect(utxos[0].satoshis).to.be.a(\"number\");",
+									"    pm.expect(utxos[0].isValid).to.be.a(\"boolean\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"utxos\": [\n    {\n      \"utxos\": [\n        {\n          \"txid\": \"{{slpTxid}}\",\n          \"vout\": 3,\n          \"value\": \"6816\",\n          \"height\": 606848,\n          \"confirmations\": 13,\n          \"satoshis\": 6816\n        },\n        {\n          \"txid\": \"{{slpTxid}}\",\n          \"vout\": 2,\n          \"value\": \"546\",\n          \"height\": 606848,\n          \"confirmations\": 13,\n          \"satoshis\": 546\n        }\n      ]\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/slp/hydrateUtxos/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"slp",
+								"hydrateUtxos",
+								""
+							]
+						},
+						"description": "Expects an array of UTXO objects as input. Returns an array of equal size. Returns UTXO data hydrated with token information. If the UTXO does not belong to a SLP transaction, it will return an isValid property set to false. If the UTXO is part of an SLP transaction, it will return the UTXO object with additional SLP information attached. An isValid property will be included. If its value is true, the UTXO is a valid SLP UTXO. If the value is null, then SLPDB has not yet processed that txid and validity has not been confirmed."
+					},
+					"response": []
+				},
+				{
+					"name": "Get the health status of SLPDB",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"response must be an object\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"object\");",
+									"",
+									"});",
+									"",
+									"pm.test(\"response details has the corresponding keys\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"_id\");",
+									"    pm.expect(responseJson).to.have.property(\"version\");",
+									"    pm.expect(responseJson).to.have.property(\"versionHash\");",
+									"    pm.expect(responseJson).to.have.property(\"deplVersionHash\");",
+									"    pm.expect(responseJson).to.have.property(\"startCmd\");",
+									"    pm.expect(responseJson).to.have.property(\"context\");",
+									"    pm.expect(responseJson).to.have.property(\"lastStatusUpdate\");",
+									"    pm.expect(responseJson).to.have.property(\"lastIncomingTxnZmq\");",
+									"    pm.expect(responseJson).to.have.property(\"lastIncomingBlockZmq\");",
+									"    pm.expect(responseJson).to.have.property(\"lastOutgoingTxnZmq\");",
+									"    pm.expect(responseJson).to.have.property(\"lastOutgoingBlockZmq\");",
+									"    pm.expect(responseJson).to.have.property(\"state\");",
+									"    pm.expect(responseJson).to.have.property(\"stateHistory\");",
+									"    pm.expect(responseJson).to.have.property(\"network\");",
+									"    pm.expect(responseJson).to.have.property(\"bchBlockHeight\");",
+									"    pm.expect(responseJson).to.have.property(\"bchBlockHash\");",
+									"    pm.expect(responseJson).to.have.property(\"slpProcessedBlockHeight\");",
+									"    pm.expect(responseJson).to.have.property(\"mempoolInfoBch\");",
+									"    pm.expect(responseJson).to.have.property(\"mempoolSizeSlp\");",
+									"    pm.expect(responseJson).to.have.property(\"tokensCount\");",
+									"    pm.expect(responseJson).to.have.property(\"pastStackTraces\");",
+									"    pm.expect(responseJson).to.have.property(\"doubleSpends\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/slp/status",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"slp",
+								"status"
+							]
+						},
+						"description": "Get the health status of SLPDB"
+					},
+					"response": []
+				}
+			],
+			"description": "Get SLP info"
+		}
+	],
+	"variable": [
+		{
+			"key": "JWT",
+			"value": "test"
+		}
+	]
+}
