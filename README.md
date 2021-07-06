@@ -20,8 +20,8 @@ TESTNET is for the testnet3 blockchain, commonly referred to as 'testnet' within
 ## Installation
 
 1. Download [Postman](https://www.postman.com/)
-2. Import Postman Collection: Import --> Upload Files --> [PSF.postman_collection.json](./PSF.postman_collection.json)
-3. Import the example PSF Environment for FullStack.cash: Settings --> Import --> Choose Files --> [BCHN.postman_environment.json](./BCHN.postman_environment.json)
+2. Import Postman Collection: Collections --> Import --> Upload Files --> [PSF.postman_collection.json](./PSF.postman_collection.json)
+3. Import the example PSF Environment for FullStack.cash: Environments --> Import --> Upload Files --> [BCHN.postman_environment.json](./BCHN.postman_environment.json)
 4. Call any FullStack.cash REST API endpoint.
 
 ## Contributing
