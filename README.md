@@ -2,6 +2,9 @@
 
 This is a collection of Postman Collections and an Environment file for working with the bch-api REST API offered by [FullStack.cash](https://fullstack.cash).
 
+- You can [get Postman here](https://www.postman.com/).
+- You can install Postman on Linux with `sudo snap install postman`
+
 There is one Collection file, which tells Postman how to interface with bch-api REST API. Load this file first:
 
 - [PSF.postman_collection.json](./PSF.postman_collection.json)
