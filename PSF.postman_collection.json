@@ -2732,6 +2732,83 @@
 				}
 			],
 			"description": "Get SLP info"
+		},
+		{
+			"name": "JWT",
+			"item": [
+				{
+					"name": "Get JWT Info",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"response must be an object\", function () {",
+									"    pm.expect(responseJson).to.be.an(\"object\");",
+									"});",
+									"pm.test(\"response has the corresponding keys\", function (){",
+									"    pm.expect(responseJson).to.have.property(\"id\");",
+									"    pm.expect(responseJson).to.have.property(\"email\");",
+									"    pm.expect(responseJson).to.have.property(\"apiLevel\");",
+									"    pm.expect(responseJson).to.have.property(\"rateLimit\");",
+									"    pm.expect(responseJson).to.have.property(\"pointsToConsume\");",
+									"    pm.expect(responseJson).to.have.property(\"duration\");",
+									"    pm.expect(responseJson).to.have.property(\"iat\");",
+									"    pm.expect(responseJson).to.have.property(\"exp\"); ",
+									"    pm.expect(responseJson).to.have.property(\"expiration\");",
+									"    pm.expect(responseJson).to.have.property(\"createdAt\");",
+									"",
+									"",
+									"    pm.expect(responseJson.id).to.be.a(\"string\");",
+									"    pm.expect(responseJson.email).to.be.a(\"string\");",
+									"    pm.expect(responseJson.apiLevel).to.be.a(\"number\");",
+									"    pm.expect(responseJson.rateLimit).to.be.a(\"number\");",
+									"    pm.expect(responseJson.pointsToConsume).to.be.a(\"number\");",
+									"    pm.expect(responseJson.duration).to.be.a(\"number\");",
+									"    pm.expect(responseJson.iat).to.be.a(\"number\");",
+									"    pm.expect(responseJson.exp).to.be.a(\"number\");",
+									"    pm.expect(responseJson.expiration).to.be.a(\"string\");",
+									"    pm.expect(responseJson.createdAt).to.be.a(\"string\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlODk3YWJhMDIyMWMxMDAxMmFkOTQwNCIsImVtYWlsIjoiZGFuaWVsaHVtZ29uQGdtYWlsLmNvbSIsImFwaUxldmVsIjo2MCwicmF0ZUxpbWl0IjozLCJwb2ludHNUb0NvbnN1bWUiOjE2LCJkdXJhdGlvbiI6MzAsImlhdCI6MTYyMDY4MzYxNSwiZXhwIjoxNjIzMjc1NjE1fQ.vb3DzOtRf0LGaRB4fJ0e9SKv3-1dKhDIhWl5tYYxgiU\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/jwt/info",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"jwt",
+								"info"
+							]
+						},
+						"description": "Get info on your JWT token."
+					},
+					"response": []
+				}
+			],
+			"description": "Get info on your JWT token. Useful for debugging rate limit issues with your JWT token.\n\n"
 		}
 	],
 	"variable": [
